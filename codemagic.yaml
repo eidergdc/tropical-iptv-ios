@@ -13,7 +13,7 @@ workflows:
         XCODE_WORKSPACE: "ios/Runner.xcworkspace"
         XCODE_SCHEME: "Runner"
         APP_STORE_APPLE_ID: 1234567890  # Substitua pelo seu App ID
-      flutter: stable
+      flutter: 3.24.0
       xcode: 15.0
       cocoapods: default
     scripts:
@@ -26,6 +26,29 @@ workflows:
       - name: Install pods
         script: | 
           find . -name "Podfile" -execdir pod install \;
+      - name: Update iOS deployment target
+        script: | 
+          cd ios
+          # Update Podfile to set minimum iOS version
+          if ! grep -q "platform :ios" Podfile; then
+            sed -i '' '1i\
+platform :ios, '\''13.0'\''
+' Podfile
+          fi
+          # Add post_install hook to update deployment target
+          if ! grep -q "post_install" Podfile; then
+            cat >> Podfile << 'EOF'
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+    end
+  end
+end
+EOF
+          fi
+          pod install --repo-update
       - name: Set up code signing settings on Xcode project
         script: | 
           xcode-project use-profiles
