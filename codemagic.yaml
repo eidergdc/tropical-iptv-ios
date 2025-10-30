@@ -29,15 +29,12 @@ workflows:
       - name: Update iOS deployment target
         script: | 
           cd ios
-          # Update Podfile to set minimum iOS version
+          # Update Podfile to set minimum iOS version and add post_install hook
           if ! grep -q "platform :ios" Podfile; then
-            sed -i '' '1i\
-platform :ios, '\''13.0'\''
-' Podfile
+            echo "platform :ios, '13.0'" | cat - Podfile > temp && mv temp Podfile
           fi
-          # Add post_install hook to update deployment target
           if ! grep -q "post_install" Podfile; then
-            cat >> Podfile << 'EOF'
+            cat >> Podfile <<'PODFILE_END'
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
@@ -46,7 +43,7 @@ post_install do |installer|
     end
   end
 end
-EOF
+PODFILE_END
           fi
           pod install --repo-update
       - name: Set up code signing settings on Xcode project
