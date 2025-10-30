@@ -1,137 +1,134 @@
-# 🚀 Guia de Configuração Codemagic.io
+# 🚀 Guia Completo de Configuração Codemagic.io
 
 ## ✅ Status Atual
-- ✅ Arquivo `codemagic.yaml` criado e enviado ao GitHub
+- ✅ Arquivo `codemagic.yaml` configurado e otimizado
 - ✅ Repositório: https://github.com/eidergdc/tropical-iptv-ios.git
 - ✅ Branch: main
-- ✅ Commit: 07853ed
+- ✅ Bundle ID: com.tropicalplay.iptv
+- ✅ Versão: 1.0.0+1
 
-## 📋 Próximos Passos
+## 📋 Passo a Passo Completo
 
 ### 1. Criar Conta no Codemagic
-1. Acesse: https://codemagic.io/
-2. Clique em "Sign up for free"
-3. Conecte com sua conta GitHub
+1. Acesse: **https://codemagic.io/**
+2. Clique em **"Sign up for free"**
+3. Conecte com sua conta **GitHub**
+4. Autorize o acesso aos repositórios
 
 ### 2. Adicionar o Repositório
-1. No dashboard do Codemagic, clique em "Add application"
-2. Selecione "GitHub"
-3. Escolha o repositório: `tropical-iptv-ios`
-4. Clique em "Finish: Add application"
+1. No dashboard do Codemagic, clique em **"Add application"**
+2. Selecione **"GitHub"** como fonte
+3. Escolha o repositório: **`eidergdc/tropical-iptv-ios`**
+4. Selecione **"Flutter App"** como tipo de projeto
+5. Clique em **"Finish: Add application"**
 
-### 3. Configurar Code Signing (Assinatura de Código)
+### 3. Configurar Code Signing (CRÍTICO!)
 
-#### Opção A: Automatic Code Signing (Recomendado)
-1. No Codemagic, vá em "Settings" > "Code signing"
-2. Clique em "iOS code signing"
-3. Conecte sua conta Apple Developer:
-   - Apple ID
-   - App-specific password (gere em appleid.apple.com)
-4. O Codemagic gerará automaticamente os certificados
+#### Opção A: Automatic Code Signing (✅ RECOMENDADO)
+1. No Codemagic, vá em **"Teams"** > **"Integrations"**
+2. Clique em **"iOS code signing"**
+3. Selecione **"Automatic code signing"**
+4. Conecte sua conta Apple Developer:
+   - **Apple ID**: seu_email@icloud.com
+   - **App-specific password**: 
+     - Acesse https://appleid.apple.com
+     - Vá em "Security" > "App-Specific Passwords"
+     - Gere uma nova senha
+     - Copie e cole no Codemagic
+5. O Codemagic gerará automaticamente:
+   - Certificado de distribuição
+   - Provisioning Profile
 
-#### Opção B: Manual Code Signing
-1. Exporte certificados do Xcode:
-   - Abra Keychain Access
-   - Exporte o certificado de distribuição (.p12)
-2. No Codemagic:
-   - Upload do arquivo .p12
-   - Upload do Provisioning Profile
+### 4. Registrar o App na App Store Connect
 
-### 4. Configurar App Store Connect
-1. No Codemagic, vá em "Teams" > "Integrations"
-2. Clique em "App Store Connect"
-3. Configure:
-   - **Issuer ID**: Encontre em App Store Connect > Users and Access > Keys
-   - **Key ID**: Crie uma nova chave API
-   - **API Key**: Baixe o arquivo .p8
+1. **Criar novo App:**
+   - Acesse: https://appstoreconnect.apple.com
+   - Vá em **"My Apps"** > **"+"** > **"New App"**
+   - Preencha:
+     - **Platform**: iOS
+     - **Name**: Tropical IPTV
+     - **Primary Language**: Portuguese (Brazil)
+     - **Bundle ID**: Selecione **com.tropicalplay.iptv**
+     - **SKU**: tropical-iptv-ios-001
+   - Clique em **"Create"**
 
-### 5. Configurar Variáveis de Ambiente
-No arquivo `codemagic.yaml`, atualize:
+2. **Anote o App ID:**
+   - Na página do app, veja a URL
+   - Exemplo: `https://appstoreconnect.apple.com/apps/1234567890/`
+   - O número **1234567890** é seu APP_STORE_APPLE_ID
 
-```yaml
-environment:
-  vars:
-    APP_STORE_ID: "seu_app_id_aqui"  # ID do app na App Store Connect
-```
+3. **Atualizar codemagic.yaml:**
+   - Edite o arquivo e substitua APP_STORE_APPLE_ID pelo seu ID
+
+### 5. Configurar App Store Connect API
+
+1. **Criar API Key:**
+   - Acesse: https://appstoreconnect.apple.com
+   - Vá em **"Users and Access"** > **"Keys"**
+   - Clique em **"+"** para criar nova chave
+   - Nome: "Codemagic CI/CD"
+   - Acesso: **"App Manager"**
+   - Clique em **"Generate"**
+   - **IMPORTANTE**: Baixe o arquivo .p8 (só pode baixar uma vez!)
+   - Anote o **Key ID** e **Issuer ID**
+
+2. **Configurar no Codemagic:**
+   - Vá em **"Teams"** > **"Integrations"**
+   - Clique em **"App Store Connect"**
+   - Preencha os dados e salve
 
 ### 6. Iniciar Build
-1. No Codemagic, clique em "Start new build"
-2. Selecione o workflow: `ios-workflow`
-3. Clique em "Start new build"
 
-## 📱 Configuração do Bundle Identifier
+1. **Fazer commit:**
+   ```bash
+   cd ~/Desktop/tropical_iptv_ios
+   git add .
+   git commit -m "Update Codemagic configuration"
+   git push
+   ```
 
-Certifique-se de que o Bundle ID está correto:
-- **Atual**: `com.tropicalplay.iptv`
-- **Arquivo**: `ios/Runner/Info.plist`
+2. **Iniciar build no Codemagic:**
+   - Clique em **"Start new build"**
+   - Selecione **branch**: main
+   - Selecione **workflow**: ios-workflow
+   - Clique em **"Start new build"**
 
-Se precisar alterar:
-```xml
-<key>CFBundleIdentifier</key>
-<string>com.tropicalplay.iptv</string>
-```
+## 📱 Informações do Projeto
 
-## 🔐 Certificados Necessários
+- **Bundle ID**: com.tropicalplay.iptv
+- **Display Name**: Tropical IPTV
+- **Version**: 1.0.0
+- **Build Number**: Incrementado automaticamente
 
-### Para App Store:
-- ✅ Apple Distribution Certificate
-- ✅ App Store Provisioning Profile
+## 🔐 Checklist
 
-### Para TestFlight:
-- ✅ Configurado automaticamente pelo Codemagic
+### Antes do Build:
+- [ ] Apple Developer Account ativo ($99/ano)
+- [ ] Bundle ID registrado
+- [ ] App criado na App Store Connect
+- [ ] API Key configurada
+- [ ] Code Signing configurado
 
-## 📦 Artefatos Gerados
+### Após o Build:
+- [ ] IPA gerado
+- [ ] Upload para TestFlight
+- [ ] App disponível para teste
 
-Após o build bem-sucedido, você terá:
-- `build/ios/ipa/*.ipa` - Arquivo IPA para distribuição
-- Logs de build
-- Screenshots (se configurado)
+## 🚀 Fluxo de Distribuição
 
-## 🚀 Distribuição Automática
-
-O workflow está configurado para:
-- ✅ Enviar automaticamente para TestFlight
-- ✅ Notificar por email sobre sucesso/falha
-- ❌ NÃO enviar automaticamente para App Store (requer aprovação manual)
-
-## 📧 Notificações
-
-Atualize o email no `codemagic.yaml`:
-```yaml
-publishing:
-  email:
-    recipients:
-      - seu_email@exemplo.com
-```
-
-## 🔧 Troubleshooting
-
-### Erro: "No code signing identities found"
-- Verifique se conectou sua conta Apple Developer
-- Certifique-se de que o Bundle ID está registrado na App Store Connect
-
-### Erro: "Build failed"
-- Verifique os logs no Codemagic
-- Certifique-se de que todas as dependências estão no `pubspec.yaml`
-
-### Erro: "Provisioning profile doesn't match"
-- Verifique se o Bundle ID no código corresponde ao registrado
-- Regenere o Provisioning Profile no Codemagic
+1. ✅ Commit no GitHub → Trigger automático
+2. ✅ Build no Codemagic → 15-20 minutos
+3. ✅ Upload para TestFlight → Automático
+4. ✅ Notificação por Email → eidergdc@icloud.com
+5. ❌ App Store → Manual
 
 ## 📚 Recursos Úteis
 
-- [Documentação Codemagic](https://docs.codemagic.io/)
-- [Flutter iOS Deployment](https://docs.flutter.dev/deployment/ios)
+- [Codemagic Docs](https://docs.codemagic.io/)
 - [App Store Connect](https://appstoreconnect.apple.com/)
-
-## ✨ Dicas
-
-1. **Primeiro Build**: Pode levar 15-20 minutos
-2. **Builds Subsequentes**: ~10 minutos (com cache)
-3. **Limite Free Tier**: 500 minutos/mês
-4. **TestFlight**: Disponível em ~30 minutos após build
+- [Apple Developer](https://developer.apple.com/)
 
 ---
 
-**Criado em**: $(date)
-**Versão**: 1.0.0
+**Versão**: 2.0  
+**Repositório**: https://github.com/eidergdc/tropical-iptv-ios
