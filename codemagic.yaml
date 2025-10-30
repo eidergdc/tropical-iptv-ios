@@ -25,26 +25,7 @@ workflows:
           flutter packages pub get
       - name: Install pods
         script: | 
-          find . -name "Podfile" -execdir pod install \;
-      - name: Update iOS deployment target
-        script: | 
           cd ios
-          # Update Podfile to set minimum iOS version and add post_install hook
-          if ! grep -q "platform :ios" Podfile; then
-            echo "platform :ios, '13.0'" | cat - Podfile > temp && mv temp Podfile
-          fi
-          if ! grep -q "post_install" Podfile; then
-            cat >> Podfile <<'PODFILE_END'
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
-    end
-  end
-end
-PODFILE_END
-          fi
           pod install --repo-update
       - name: Set up code signing settings on Xcode project
         script: | 
