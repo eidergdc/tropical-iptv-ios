@@ -13,7 +13,7 @@ workflows:
         XCODE_WORKSPACE: "ios/Runner.xcworkspace"
         XCODE_SCHEME: "Runner"
         APP_STORE_APPLE_ID: 1234567890  # Substitua pelo seu App ID
-      flutter: 3.24.0
+      flutter: 3.27.1
       xcode: 15.0
       cocoapods: default
     scripts:
