@@ -20,6 +20,9 @@ workflows:
       - name: Set up local properties
         script: | 
           echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Clean Flutter cache
+        script: | 
+          flutter clean
       - name: Get Flutter packages
         script: | 
           flutter packages pub get
