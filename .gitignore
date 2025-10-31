@@ -88,7 +88,7 @@ lib/generated_plugin_registrant.dart
 # Firebase
 **/ios/Runner/GoogleService-Info.plist
 **/android/app/google-services.json
-firebase_options.dart
+# firebase_options.dart - commented out to include in repository for CI/CD
 
 # Environment variables
 .env
