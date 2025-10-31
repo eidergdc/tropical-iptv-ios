@@ -23,9 +23,9 @@ workflows:
       - name: Get Flutter packages
         script: | 
           flutter packages pub get
-      - name: Flutter precache iOS
+      - name: Generate iOS configuration
         script: | 
-          flutter precache --ios
+          flutter build ios --config-only --no-codesign
       - name: Install pods
         script: | 
           cd ios
