@@ -29,8 +29,13 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!
+  use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  
+  # VLC Player specific configuration
+  pod 'MobileVLCKit', '~> 3.3.0'
+  
   target 'RunnerTests' do
     inherit! :search_paths
   end
