@@ -29,6 +29,12 @@ workflows:
       - name: Generate iOS configuration
         script: | 
           flutter build ios --config-only --no-codesign
+      - name: Clean pods cache
+        script: | 
+          cd ios
+          rm -rf Pods
+          rm -rf Podfile.lock
+          pod cache clean --all
       - name: Install pods
         script: | 
           cd ios
@@ -46,7 +52,8 @@ workflows:
         script: | 
           flutter build ipa --release \
             --build-name=1.0.0 \
-            --build-number=$BUILD_NUMBER
+            --build-number=$BUILD_NUMBER \
+            --verbose
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
